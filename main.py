@@ -105,9 +105,12 @@ async def link_handler(bot, message):
         await loop.run_in_executor(None, partial(ytdl_dowload, url, opts))
         filename = sorted(get_lst_of_files(out_folder, []))
         for single_file in filename:
-            await bot.send_video(singlefile)
-            continue
-
+            if os.path.exists(single_file):
+                try:
+                    await bot.send_video(single_file)
+                except Exception as e:
+                    print(e)
+                    continue
 
 
 
