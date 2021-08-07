@@ -92,7 +92,7 @@ async def link_handler(bot, message):
         await loop.run_in_executor(None, partial(ytdl_dowload, url, opts))
         filename = sorted(get_lst_of_files(out_folder, []))
         try:
-            await message.reply_video(filename)
+            await bot.send_video(filename)
         except Exception as e:
             print(e)
      
