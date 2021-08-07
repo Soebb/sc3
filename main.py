@@ -37,11 +37,23 @@ def ytdl_dowload(result, opts):
     except Exception as e:
         print(e)
 
+
 @bot.on_message(filters.command('start') & filters.private)
 async def start(bot, message):
     await message.reply(
         f"**Hi {message.chat.first_name}!**\n\n"
         "I am a bot to scrape youtube channel videos urls, just send me a youtube channel link to start scraping")
+
+
+def get_lst_of_files(input_directory, output_lst):
+    filesinfolder = os.listdir(input_directory)
+    for file_name in filesinfolder:
+        current_file_name = os.path.join(input_directory, file_name)
+        if os.path.isdir(current_file_name):
+            return get_lst_of_files(current_file_name, output_lst)
+        output_lst.append(current_file_name)
+    return output_lst
+
 
 @bot.on_message(filters.private & filters.regex(pattern=".*http.*"))
 async def link_handler(bot, message):
@@ -97,15 +109,6 @@ async def link_handler(bot, message):
             continue
 
 
-
-def get_lst_of_files(input_directory, output_lst):
-    filesinfolder = os.listdir(input_directory)
-    for file_name in filesinfolder:
-        current_file_name = os.path.join(input_directory, file_name)
-        if os.path.isdir(current_file_name):
-            return get_lst_of_files(current_file_name, output_lst)
-        output_lst.append(current_file_name)
-    return output_lst
 
 
 bot.run()
