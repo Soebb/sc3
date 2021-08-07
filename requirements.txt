@@ -1,0 +1,5 @@
+Pyrogram
+TgCrypto
+urllib3
+selenium
+youtube_dl
