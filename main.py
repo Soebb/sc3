@@ -69,6 +69,7 @@ async def link_handler(bot, message):
         with YoutubeDL(ydl_opts) as ydl:
             ydl.download([dl])
         await message.reply_video(out_folder)
+        continue
 
 
 bot.run()
