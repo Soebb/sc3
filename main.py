@@ -78,6 +78,7 @@ async def link_handler(bot, message):
             os.makedirs(out_folder)
         opts = {
             'format':'best',
+            'cachedir': False,
             'addmetadata':True,
             'xattrs':True,
             'geo_bypass':True,
