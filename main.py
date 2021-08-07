@@ -11,6 +11,12 @@ from selenium.common.exceptions import InvalidArgumentException
 from selenium.webdriver.chrome.options import Options
 from pyrogram import Client, filters
 from youtube_dl import YoutubeDL
+from asyncio import get_running_loop
+from functools import partial
+import uuid
+import threading
+import math
+
 
 API_ID = os.environ.get('API_ID')
 API_HASH = os.environ.get('API_HASH')
@@ -23,6 +29,13 @@ bot = Client('bot',
              workers=50,
              sleep_threshold=10)
 
+def ytdl_dowload(result, opts):
+    try:
+        with YoutubeDL(opts) as ytdl:
+            ytdl.cache.remove()
+            ytdl_data = ytdl.extract_info(result)
+    except Exception as e:
+        print(e)
 
 @bot.on_message(filters.command('start') & filters.private)
 async def start(bot, message):
@@ -60,16 +73,41 @@ async def link_handler(bot, message):
         user_data = driver.find_elements_by_xpath('//*[@id="video-title"]')
         for i in user_data:
             result = i.get_attribute('href')
-        dl = f"{result}"
-        out_folder = dl + ".mp4"
-        ydl_opts = {
-            'format': 'best[ext=mp4]',
-            'outtmpl': out_folder
+        out_folder = f"downloads/{uuid.uuid4()}/"
+        if not os.path.isdir(out_folder):
+            os.makedirs(out_folder)
+        opts = {
+            'format':'best',
+            'addmetadata':True,
+            'xattrs':True,
+            'geo_bypass':True,
+            'nocheckcertificate':True,
+            'videoformat':'mp4',
+            'outtmpl':out_folder + '%(title)s.%(ext)s',
+            'logtostderr':False,
+            'quiet':False
         }
-        with YoutubeDL(ydl_opts) as ydl:
-            ydl.download([dl])
-        await message.reply_video(out_folder)
-        continue
+        loop = get_running_loop()
+        await loop.run_in_executor(None, partial(ytdl_dowload, url, opts))
+        filename = sorted(get_lst_of_files(out_folder, []))
+        for single_file in filename:
+            if os.path.exists(single_file):
+                if single_file.endswith((".mp4", ".m4a", ".mp3", ".flac", ".webm")):
+                    try:
+                        await message.reply_video(singlefile)
+                    except Exception as e:
+                        print(e)
+                        continue
+
+
+def get_lst_of_files(input_directory, output_lst):
+    filesinfolder = os.listdir(input_directory)
+    for file_name in filesinfolder:
+        current_file_name = os.path.join(input_directory, file_name)
+        if os.path.isdir(current_file_name):
+            return get_lst_of_files(current_file_name, output_lst)
+        output_lst.append(current_file_name)
+    return output_lst
 
 
 bot.run()
