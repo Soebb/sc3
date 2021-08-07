@@ -61,14 +61,14 @@ async def link_handler(bot, message):
         for i in user_data:
             result = i.get_attribute('href')
         dl = f"{result}"
+        out_folder = dl + ".mp4"
         ydl_opts = {
             'format': 'best[ext=mp4]',
-            'outtmpl': dl + '%(ext)s'
+            'outtmpl': out_folder
         }
         with YoutubeDL(ydl_opts) as ydl:
             ydl.download([dl])
-        vid = dl + ".mp4"
-        await message.reply_video(vid)
+        await message.reply_video(out_folder)
 
 
 bot.run()
