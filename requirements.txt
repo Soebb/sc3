@@ -4,3 +4,4 @@ urllib3
 selenium
 youtube_dl
 uuid
+asyncio
