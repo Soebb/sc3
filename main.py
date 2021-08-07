@@ -92,6 +92,7 @@ async def link_handler(bot, message):
         opts = {
             'format':'best',
             'cachedir':False,
+            'noplaylist':False,
             'addmetadata':True,
             'xattrs':True,
             'geo_bypass':True,
