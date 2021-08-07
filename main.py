@@ -91,14 +91,11 @@ async def link_handler(bot, message):
         loop = get_running_loop()
         await loop.run_in_executor(None, partial(ytdl_dowload, url, opts))
         filename = sorted(get_lst_of_files(out_folder, []))
-        for single_file in filename:
-            if os.path.exists(single_file):
-                if single_file.endswith((".mp4", ".m4a", ".mp3", ".flac", ".webm")):
-                    try:
-                        await message.reply_video(singlefile)
-                    except Exception as e:
-                        print(e)
-                        continue
+        try:
+            await message.reply_video(filename)
+        except Exception as e:
+            print(e)
+     
 
 
 def get_lst_of_files(input_directory, output_lst):
