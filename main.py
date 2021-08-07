@@ -63,7 +63,7 @@ async def link_handler(bot, message):
         dl = result
         ydl_opts = {
             'format': 'best[ext=mp4]',
-            'noplaylist': 'False',
+            'noplaylist': False,
             'outtmpl': '%(title)s.%(ext)s'
         }
         with YoutubeDL(ydl_opts) as ydl:
