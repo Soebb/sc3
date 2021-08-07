@@ -60,14 +60,14 @@ async def link_handler(bot, message):
         user_data = driver.find_elements_by_xpath('//*[@id="video-title"]')
         for i in user_data:
             result = i.get_attribute('href')
-        dl, out_folder = f"{result}"
+        dl = f"{result}"
         ydl_opts = {
             'format': 'best[ext=mp4]',
-            'outtmpl': out_folder + '%(ext)s'
+            'outtmpl': dl + '%(ext)s'
         }
         with YoutubeDL(ydl_opts) as ydl:
             ydl.download([dl])
-        vid = out_folder + ".mp4"
+        vid = dl + ".mp4"
         await message.reply_video(vid)
 
 
