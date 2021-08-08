@@ -92,7 +92,6 @@ async def link_handler(bot, message):
         opts = {
             'format':'best',
             'cachedir':False,
-            'noplaylist':False,
             'addmetadata':True,
             'xattrs':True,
             'geo_bypass':True,
@@ -108,7 +107,7 @@ async def link_handler(bot, message):
         for single_file in filename:
             if os.path.exists(single_file):
                 try:
-                    await bot.send_video(message.chat.id, single_file)
+                    await message.reply_video(single_file)
                 except Exception as e:
                     print(e)
                     continue
