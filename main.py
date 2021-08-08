@@ -25,9 +25,7 @@ BOT_TOKEN = os.environ.get('BOT_TOKEN')
 bot = Client('bot',
              api_id=API_ID,
              api_hash=API_HASH,
-             bot_token=BOT_TOKEN,
-             workers=50,
-             sleep_threshold=10)
+             bot_token=BOT_TOKEN)
 
 
 def get_lst_of_files(input_directory, output_lst):
