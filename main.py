@@ -105,7 +105,10 @@ async def link_handler(bot, message):
         for single_file in filename:
             if os.path.exists(single_file):
                 try:
-                    await message.reply_video(single_file)
+                    await bot.send_video(
+                              chat_id=message.chat.id,
+                              video=single_file
+                          )
                 except Exception as e:
                     print(e)
                     continue
